@@ -53,7 +53,7 @@ var connect = function () { return __awaiter(_this, void 0, void 0, function () 
     });
 }); };
 connect().then(function (api) { return __awaiter(_this, void 0, void 0, function () {
-    var add, now, _a, nonce, balance, chain, lastHeader, count, unsubHeads;
+    var add, now, _a, nonce, balance, chain, lastHeader, count, unsubHeads, unsub;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -74,16 +74,25 @@ connect().then(function (api) { return __awaiter(_this, void 0, void 0, function
                 // Log the information
                 console.log("".concat(chain, ": last block #").concat(lastHeader.number, " has hash ").concat(lastHeader.hash));
                 count = 0;
-                return [4 /*yield*/, api.rpc.chain.subscribeAllHeads(function (lastHeader) {
+                return [4 /*yield*/, api.rpc.chain.subscribeNewHeads(function (lastHeader) {
                         console.log("Last block #".concat(lastHeader.number, " has hash ").concat(lastHeader.hash));
                         var hash = lastHeader.hash, number = lastHeader.number;
                         console.log("Block number ".concat(number.toNumber(), " has hash ").concat(hash));
-                        if (++count === 20) {
+                        if (count++ === 20) {
+                            unsub();
                             unsubHeads();
                         }
                     })];
             case 5:
                 unsubHeads = _b.sent();
+                return [4 /*yield*/, api.derive.chain.subscribeNewHeads(function (lastHeader) {
+                        console.log("#".concat(lastHeader.number, " was authored by ").concat(lastHeader.author));
+                    })];
+            case 6:
+                unsub = _b.sent();
+                console.log(count);
+                console.log(count);
+                console.log(count);
                 return [2 /*return*/];
         }
     });

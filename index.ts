@@ -40,13 +40,22 @@ connect().then(async (api) => {
 
         const { hash, number } = lastHeader;
         console.log(`Block number ${number.toNumber()} has hash ${hash}`);
-        
-        if (++count === 20) {
+    
+        if (count++ === 20) {
+            unsub();
             unsubHeads();
         }
     });
+    
+    const unsub = await api.derive.chain.subscribeNewHeads((lastHeader) => {
+        console.log(`#${lastHeader.number} was authored by ${lastHeader.author}`);
+    });
 
+    console.log(count);
+    console.log(count);console.log(count);
 }).catch((err) => {
     console.error(err)
 }).finally(() => process.exit());
+
+
 
