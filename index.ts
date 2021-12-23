@@ -35,24 +35,22 @@ connect().then(async (api) => {
     let count = 0;
 
     // Subscribe to the new headers
-    const unsubHeads = await api.rpc.chain.subscribeNewHeads((lastHeader:any) => {
-        console.log(`Last block #${lastHeader.number} has hash ${lastHeader.hash}`);
-
+    var unsubHeads = await api.rpc.chain.subscribeNewHeads((lastHeader: any) => {
+        //console.log(`Last block #${lastHeader.number} has hash ${lastHeader.hash}`);
         const { hash, number } = lastHeader;
         console.log(`Block number ${number.toNumber()} has hash ${hash}`);
-    
-        if (count++ === 20) {
-            unsub();
+        
+        if (++count === 20) {
             unsubHeads();
+            console.log(count+" inside");
         }
+        console.log(count);
     });
-    
+
     const unsub = await api.derive.chain.subscribeNewHeads((lastHeader) => {
         console.log(`#${lastHeader.number} was authored by ${lastHeader.author}`);
     });
 
-    console.log(count);
-    console.log(count);console.log(count);
 }).catch((err) => {
     console.error(err)
 }).finally(() => process.exit());

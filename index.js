@@ -54,6 +54,7 @@ var connect = function () { return __awaiter(_this, void 0, void 0, function () 
 }); };
 connect().then(function (api) { return __awaiter(_this, void 0, void 0, function () {
     var add, now, _a, nonce, balance, chain, lastHeader, count, unsubHeads, unsub;
+    var _this = this;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -74,15 +75,19 @@ connect().then(function (api) { return __awaiter(_this, void 0, void 0, function
                 // Log the information
                 console.log("".concat(chain, ": last block #").concat(lastHeader.number, " has hash ").concat(lastHeader.hash));
                 count = 0;
-                return [4 /*yield*/, api.rpc.chain.subscribeNewHeads(function (lastHeader) {
-                        console.log("Last block #".concat(lastHeader.number, " has hash ").concat(lastHeader.hash));
-                        var hash = lastHeader.hash, number = lastHeader.number;
-                        console.log("Block number ".concat(number.toNumber(), " has hash ").concat(hash));
-                        if (count++ === 20) {
-                            unsub();
-                            unsubHeads();
-                        }
-                    })];
+                return [4 /*yield*/, api.rpc.chain.subscribeNewHeads(function (lastHeader) { return __awaiter(_this, void 0, void 0, function () {
+                        var hash, number;
+                        return __generator(this, function (_a) {
+                            hash = lastHeader.hash, number = lastHeader.number;
+                            console.log("Block number ".concat(number.toNumber(), " has hash ").concat(hash));
+                            if (++count === 20) {
+                                unsubHeads();
+                                console.log(count + " inside");
+                            }
+                            console.log(count);
+                            return [2 /*return*/];
+                        });
+                    }); })];
             case 5:
                 unsubHeads = _b.sent();
                 return [4 /*yield*/, api.derive.chain.subscribeNewHeads(function (lastHeader) {
@@ -90,9 +95,6 @@ connect().then(function (api) { return __awaiter(_this, void 0, void 0, function
                     })];
             case 6:
                 unsub = _b.sent();
-                console.log(count);
-                console.log(count);
-                console.log(count);
                 return [2 /*return*/];
         }
     });
